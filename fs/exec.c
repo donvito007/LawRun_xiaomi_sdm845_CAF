@@ -58,6 +58,10 @@
 #include <linux/compat.h>
 #include <linux/vmalloc.h>
 
+#ifdef CONFIG_KSU
+#include <linux/ksu.h>
+#endif
+
 #include <asm/uaccess.h>
 #include <asm/mmu_context.h>
 #include <asm/tlb.h>
@@ -1687,7 +1691,8 @@ static int do_execveat_common(int fd, struct filename *filename,
 			      int flags)
 {
 #ifdef CONFIG_KSU
-	ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+	if (get_ksu_state() > 0)
+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 #endif
 	char *pathbuf = NULL;
 	struct linux_binprm *bprm;
