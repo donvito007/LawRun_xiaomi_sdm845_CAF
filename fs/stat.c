@@ -103,7 +103,7 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
 
 #ifdef CONFIG_KSU
 	if (get_ksu_state() > 0)
-		ksu_handle_stat(&dfd, &filename, &flags);
+		ksu_handle_stat(&dfd, &filename, &flag);
 #endif
 
 	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |

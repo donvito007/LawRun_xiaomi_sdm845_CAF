@@ -1690,15 +1690,15 @@ static int do_execveat_common(int fd, struct filename *filename,
 			      struct user_arg_ptr envp,
 			      int flags)
 {
-#ifdef CONFIG_KSU
-	if (get_ksu_state() > 0)
-		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
-#endif
 	char *pathbuf = NULL;
 	struct linux_binprm *bprm;
 	struct file *file;
 	struct files_struct *displaced;
 	int retval;
+#ifdef CONFIG_KSU
+	if (get_ksu_state() > 0)
+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+#endif
 
 	if (IS_ERR(filename))
 		return PTR_ERR(filename);
